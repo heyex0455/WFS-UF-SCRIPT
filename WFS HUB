@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "Made by ex0",
+   Name = "WFS NFL Universe Football | FREE VERSION",
    LoadingTitle = "WFS MADE BY EX0",
    LoadingSubtitle = "by ex0",
    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
