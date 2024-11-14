@@ -39,7 +39,7 @@ local Window = Rayfield:CreateWindow({
     Name = "Blitzed NFL Universe Football | FREE VERSION",
     LoadingTitle = "Blitzed MADE BY EX0",
     LoadingSubtitle = "by ex0",
-    Theme = "Default",
+    Theme = "Amethyst",
 
     DisableRayfieldPrompts = false,
     DisableBuildWarnings = false,
