@@ -101,33 +101,65 @@ local Button = MainTab:CreateButton({
 -- Tab for fun activities
 local Tab = Window:CreateTab("fun activity🧸", 4483362458) -- Title, Image
 
--- Create Button for modifying hands
 local Button = Tab:CreateButton({
-   Name = "Long amrs | MUST HAVE GOOD PING",
+   Name = "Long arms",
    Callback = function()
-       -- Function to modify only the hands when the button is clicked
-       
-       local player = game.Players.LocalPlayer
-       
-       -- Function to stretch hands a little bit (slightly elongated)
-       local function stretchHands(character)
-           -- Wait for the parts to load in the character model
-           local leftHand = character:WaitForChild("LeftHand")
-           local rightHand = character:WaitForChild("RightHand")
-           
-           -- Stretch the hands to be slightly longer and thinner
-           leftHand.Size = Vector3.new(1, 28, 1)  -- Slightly longer left hand
-           rightHand.Size = Vector3.new(1, 28, 1)  -- Slightly longer right hand
-           
-           -- Set the hands to be non-collidable (so they don't interact with the environment)
-           leftHand.CanCollide = false
-           rightHand.CanCollide = false
-       end
+   local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()  -- Wait for character to load if it's not yet loaded
 
-       -- Apply the hand modifications when the button is pressed
-       local character = player.Character
-       if character and character:FindFirstChild("Humanoid") then
-           stretchHands(character)
-       end
+-- Function to stretch hands and apply effects like tackle reach and catch radius
+local function stretchHands(character)
+    -- Wait for the parts to load in the character model
+    local leftHand = character:WaitForChild("LeftHand")
+    local rightHand = character:WaitForChild("RightHand")
+    
+    -- Stretch the hands to be longer and thinner (adjust this as needed)
+    leftHand.Size = Vector3.new(1, 28, 1)  -- Slightly longer left hand
+    rightHand.Size = Vector3.new(1, 28, 1)  -- Slightly longer right hand
+    
+    -- Set the hands to be non-collidable (so they don't interact with the environment)
+    leftHand.CanCollide = false
+    rightHand.CanCollide = false
+end
+
+-- Function to apply the long reach for ball grab
+local function detectAndGrabBall()
+    local ballGrabRange = 20  -- Distance in studs to grab the ball from
+
+    -- Detect the ball (assuming the ball is a part that exists in the game world)
+    local ball = game.Workspace:FindFirstChild("Football")  -- Assuming the ball is named "Football"
+    if ball then
+        -- Calculate the distance between the player and the ball
+        local distance = (ball.Position - character.HumanoidRootPart.Position).magnitude
+        
+        -- If the ball is within the grab range, initiate the grab
+        if distance <= ballGrabRange then
+            -- Example: "Grab" the ball by making the player interact with it
+            -- This would depend on how ball grabbing is implemented in your game
+            
+            -- Move the ball to the player's hand position
+            ball.CFrame = character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)  -- Move ball in front of player
+            
+            -- Optionally, play a sound or trigger an animation when the ball is grabbed
+            local sound = Instance.new("Sound", ball)
+            sound.SoundId = "rbxassetid://123456789"  -- Example sound ID (use your own)
+            sound:Play()
+
+            -- Trigger an animation for the player when the ball is grabbed (if applicable)
+            -- You can add an animation trigger here if your game uses custom animations
+        end
+    end
+end
+
+-- Apply the functionality as soon as the character is loaded
+stretchHands(character)  -- Apply long arms
+
+-- Run the ball grab detection continuously
+local runService = game:GetService("RunService")
+
+runService.Heartbeat:Connect(function() 
+    detectAndGrabBall()  -- Continuously check if the ball is within reach
+end)
+
    end,
 })
