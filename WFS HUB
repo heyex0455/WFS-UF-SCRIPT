@@ -134,7 +134,7 @@ local Button = MainTab:CreateButton({
 local Tab = Window:CreateTab("fun activity🧸", 4483362458)
 
 local Button = Tab:CreateButton({
-    Name = "Long arms | MUST HAVE GOOD PING",
+    Name = "Mag | MUST HAVE GOOD PING",
     Callback = function()
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
@@ -151,7 +151,7 @@ local Button = Tab:CreateButton({
         end
 
         local function detectAndGrabBall()
-            local ballGrabRange = 50
+            local ballGrabRange = 100
             local ball = game.Workspace:FindFirstChild("Football")
             if ball then
                 local distance = (ball.Position - character.HumanoidRootPart.Position).magnitude
