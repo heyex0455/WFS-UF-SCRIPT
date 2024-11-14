@@ -95,7 +95,7 @@ local ToggleJumpHigh = MainTab:CreateToggle({
 
 local Tab = Window:CreateTab("fun activity🧸", 4483362458) -- Title, Image
 
-local ButtonExample = MainTab:CreateButton({
+local ButtonExample = Tab:CreateButton({
    Name = "Long Arms",
    Callback = function()
        -- Add long arms functionality here (you can paste the earlier long arms script code here)
