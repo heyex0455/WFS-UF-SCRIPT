@@ -1,165 +1,174 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+-- Set up your webhook URL here
+local webhookURL = "https://discord.com/api/webhooks/1306506599040290846/uw3l6F1CaLWEgTChFaxXSdzf13u56HQ4MkGL2_-gHs2dtfBP9y3dnXAX1ODjgZ0mmpd5"
+
+-- Function to send log message to Discord
+local function sendLogToDiscord(message)
+    local data = {
+        ["content"] = message
+    }
+    
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+
+    local httpService = game:GetService("HttpService")
+    local jsonData = httpService:JSONEncode(data)
+
+    -- Send HTTP request to the webhook
+    local success, response = pcall(function()
+        return game:GetService("HttpService"):PostAsync(webhookURL, jsonData, Enum.HttpContentType.ApplicationJson)
+    end)
+
+    -- Check if the request was successful
+    if not success then
+        warn("Failed to send log to Discord:", response)
+    end
+end
+
+-- Log message when script is executed
+local playerName = game.Players.LocalPlayer.Name
+local timeExecuted = os.date("%Y-%m-%d %H:%M:%S")  -- Get the current time
+local logMessage = string.format("Script executed by: %s | Time: %s", playerName, timeExecuted)
+
+-- Send log to Discord
+sendLogToDiscord(logMessage)
+
 local Window = Rayfield:CreateWindow({
-   Name = "WFS NFL Universe Football | FREE VERSION",
-   LoadingTitle = "WFS MADE BY EX0",
-   LoadingSubtitle = "by ex0",
-   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+    Name = "WFS NFL Universe Football | FREE VERSION",
+    LoadingTitle = "WFS MADE BY EX0",
+    LoadingSubtitle = "by ex0",
+    Theme = "Default",
 
-   DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+    DisableRayfieldPrompts = false,
+    DisableBuildWarnings = false,
 
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = nil, -- Create a custom folder for your hub/game
-      FileName = "Big Hub"
-   },
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = nil,
+        FileName = "Big Hub"
+    },
 
-   Discord = {
-      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
-      Invite = "", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
-      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
-   },
+    Discord = {
+        Enabled = false,
+        Invite = "",
+        RememberJoins = true
+    },
 
-   KeySystem = true, -- Set this to true to use our key system
-   KeySettings = {
-      Title = "NFL Universe Football🏈 | made by ex0",
-      Subtitle = "Key System",
-      Note = "Join discord | for key", -- Use this to tell the user how to get a key
-      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"BestUFScriptmadebyex0!"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
-   }
+    KeySystem = true,
+    KeySettings = {
+        Title = "NFL Universe Football🏈 | made by ex0",
+        Subtitle = "Key System",
+        Note = "Join discord | for key",
+        FileName = "Key",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = {"BESTUFSCRIPT!"}
+    }
 })
 
-local MainTab = Window:CreateTab("powers⚡", nil) -- Title, Image
+local MainTab = Window:CreateTab("powers⚡", nil) 
 local MainSection = MainTab:CreateSection("Main")
 
 Rayfield:Notify({
-   Title = "Thank you for using WFS",
-   Content = "",
-   Duration = 5,
-   Image = 4483362458,
-   Actions = { -- Notification Buttons
-      Ignore = { -- Duplicate this table (or remove it) to add and remove buttons to the notification.
-         Name = "Okay!",
-         Callback = function()
-            print("The user tapped Okay!")
-         end
-      },
-   },
+    Title = "Thank you for using WFS",
+    Content = "",
+    Duration = 5,
+    Image = 4483362458,
+    Actions = {
+        Ignore = {
+            Name = "Okay!",
+            Callback = function()
+                print("The user tapped Okay!")
+            end
+        }
+    },
 })
 
 -- Walk Speed Slider
 local Slider = MainTab:CreateSlider({
-   Name = "Walk Speed",
-   Range = {0, 500},
-   Increment = 16,
-   Suffix = "Bananas",
-   CurrentValue = 10,
-   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-       game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
-   end,
+    Name = "Walk Speed",
+    Range = {0, 500},
+    Increment = 16,
+    Suffix = "Bananas",
+    CurrentValue = 10,
+    Flag = "Slider1",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+    end,
 })
 
 -- Jump High Toggle
-local isJumpHigh = false  -- Track the state of the toggle (true for high jump, false for normal)
+local isJumpHigh = false
 
 local ToggleJumpHigh = MainTab:CreateToggle({
-   Name = "Jump High",
-   CurrentValue = false,
-   Flag = "JumpHighToggle", -- A flag is the identifier for the configuration file
-   Callback = function(Value)
-       isJumpHigh = Value  -- Update the state of the toggle
+    Name = "Jump High",
+    CurrentValue = false,
+    Flag = "JumpHighToggle",
+    Callback = function(Value)
+        isJumpHigh = Value
 
-       local character = game.Players.LocalPlayer.Character
-       if character and character:FindFirstChild("Humanoid") then
-           local humanoid = character.Humanoid
-           
-           if isJumpHigh then
-               -- Enable high jump
-               humanoid.JumpPower = 150  -- Higher jump power
-               humanoid.JumpHeight = 100  -- Higher jump height
-           else
-               -- Reset to normal jump
-               humanoid.JumpPower = 50  -- Default jump power
-               humanoid.JumpHeight = 7  -- Default jump height
-           end
-       end
-   end,
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("Humanoid") then
+            local humanoid = character.Humanoid
+            if isJumpHigh then
+                humanoid.JumpPower = 150
+                humanoid.JumpHeight = 100
+            else
+                humanoid.JumpPower = 50
+                humanoid.JumpHeight = 7
+            end
+        end
+    end,
 })
 
 local Button = MainTab:CreateButton({
-   Name = "fly",
-   Callback = function()
-   loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\40\39\104\116\116\112\115\58\47\47\103\105\115\116\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\109\101\111\122\111\110\101\89\84\47\98\102\48\51\55\100\102\102\57\102\48\97\55\48\48\49\55\51\48\52\100\100\100\54\55\102\100\99\100\51\55\48\47\114\97\119\47\101\49\52\101\55\52\102\52\50\53\98\48\54\48\100\102\53\50\51\51\52\51\99\102\51\48\98\55\56\55\48\55\52\101\98\51\99\53\100\50\47\97\114\99\101\117\115\37\50\53\50\48\120\37\50\53\50\48\102\108\121\37\50\53\50\48\50\37\50\53\50\48\111\98\102\108\117\99\97\116\111\114\39\41\44\116\114\117\101\41\41\40\41\10\10")()
-   end,
+    Name = "fly",
+    Callback = function()
+        loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\40\39\104\116\116\112\115\58\47\47\103\105\115\116\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\109\101\111\122\111\110\101\89\84\47\98\102\48\51\55\100\102\102\57\102\48\97\55\48\48\49\55\51\48\52\100\100\100\54\55\102\100\99\100\51\55\48\47\114\97\119\47\101\49\52\101\55\52\102\52\50\53\98\48\54\48\100\102\53\50\51\51\52\51\99\102\51\48\98\55\56\55\48\55\52\101\98\51\99\53\100\50\47\97\114\99\101\117\115\37\50\53\50\48\120\37\50\53\50\48\102\108\121\37\50\53\50\48\50\37\50\53\50\48\111\98\102\108\117\99\97\116\111\114\39\41\44\116\114\117\101\41\41\40\41\10\10")()
+    end,
 })
 
 -- Tab for fun activities
-local Tab = Window:CreateTab("fun activity🧸", 4483362458) -- Title, Image
+local Tab = Window:CreateTab("fun activity🧸", 4483362458)
 
 local Button = Tab:CreateButton({
-   Name = "Long arms | MUST HAVE GOOD PING",
-   Callback = function()
-   local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()  -- Wait for character to load if it's not yet loaded
+    Name = "Long arms | MUST HAVE GOOD PING",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
 
--- Function to stretch hands and apply effects like tackle reach and catch radius
-local function stretchHands(character)
-    -- Wait for the parts to load in the character model
-    local leftHand = character:WaitForChild("LeftHand")
-    local rightHand = character:WaitForChild("RightHand")
-    
-    -- Stretch the hands to be longer and thinner (adjust this as needed)
-    leftHand.Size = Vector3.new(1, 28, 1)  -- Slightly longer left hand
-    rightHand.Size = Vector3.new(1, 28, 1)  -- Slightly longer right hand
-    
-    -- Set the hands to be non-collidable (so they don't interact with the environment)
-    leftHand.CanCollide = false
-    rightHand.CanCollide = false
-end
+        local function stretchHands(character)
+            local leftHand = character:WaitForChild("LeftHand")
+            local rightHand = character:WaitForChild("RightHand")
 
--- Function to apply the long reach for ball grab
-local function detectAndGrabBall()
-    local ballGrabRange = 20  -- Distance in studs to grab the ball from
+            leftHand.Size = Vector3.new(1, 35, 1)
+            rightHand.Size = Vector3.new(1, 35, 1)
 
-    -- Detect the ball (assuming the ball is a part that exists in the game world)
-    local ball = game.Workspace:FindFirstChild("Football")  -- Assuming the ball is named "Football"
-    if ball then
-        -- Calculate the distance between the player and the ball
-        local distance = (ball.Position - character.HumanoidRootPart.Position).magnitude
-        
-        -- If the ball is within the grab range, initiate the grab
-        if distance <= ballGrabRange then
-            -- Example: "Grab" the ball by making the player interact with it
-            -- This would depend on how ball grabbing is implemented in your game
-            
-            -- Move the ball to the player's hand position
-            ball.CFrame = character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)  -- Move ball in front of player
-            
-            -- Optionally, play a sound or trigger an animation when the ball is grabbed
-            local sound = Instance.new("Sound", ball)
-            sound.SoundId = "rbxassetid://123456789"  -- Example sound ID (use your own)
-            sound:Play()
-
-            -- Trigger an animation for the player when the ball is grabbed (if applicable)
-            -- You can add an animation trigger here if your game uses custom animations
+            leftHand.CanCollide = false
+            rightHand.CanCollide = false
         end
-    end
-end
 
--- Apply the functionality as soon as the character is loaded
-stretchHands(character)  -- Apply long arms
+        local function detectAndGrabBall()
+            local ballGrabRange = 50
+            local ball = game.Workspace:FindFirstChild("Football")
+            if ball then
+                local distance = (ball.Position - character.HumanoidRootPart.Position).magnitude
+                if distance <= ballGrabRange then
+                    ball.CFrame = character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
+                    local sound = Instance.new("Sound", ball)
+                    sound.SoundId = "rbxassetid://123456789"
+                    sound:Play()
+                end
+            end
+        end
 
--- Run the ball grab detection continuously
-local runService = game:GetService("RunService")
+        stretchHands(character)
 
-runService.Heartbeat:Connect(function() 
-    detectAndGrabBall()  -- Continuously check if the ball is within reach
-end)
-
-   end,
+        local runService = game:GetService("RunService")
+        runService.Heartbeat:Connect(function()
+            detectAndGrabBall()
+        end)
+    end,
 })
