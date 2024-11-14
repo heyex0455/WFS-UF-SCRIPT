@@ -102,7 +102,7 @@ local Button = MainTab:CreateButton({
 local Tab = Window:CreateTab("fun activity🧸", 4483362458) -- Title, Image
 
 local Button = Tab:CreateButton({
-   Name = "Long arms",
+   Name = "Long arms | MUST HAVE GOOD PING",
    Callback = function()
    local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()  -- Wait for character to load if it's not yet loaded
