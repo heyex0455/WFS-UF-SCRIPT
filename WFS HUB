@@ -91,13 +91,36 @@ local ToggleJumpHigh = MainTab:CreateToggle({
    end,
 })
 
--- Example of another Button (You can add more if needed)
-
+-- Tab for fun activities
 local Tab = Window:CreateTab("fun activity🧸", 4483362458) -- Title, Image
 
-local ButtonExample = Tab:CreateButton({
-   Name = "Long Arms",
+-- Create Button for modifying hands
+local Button = Tab:CreateButton({
+   Name = "Long amrs",
    Callback = function()
-       -- Add long arms functionality here (you can paste the earlier long arms script code here)
+       -- Function to modify only the hands when the button is clicked
+       
+       local player = game.Players.LocalPlayer
+       
+       -- Function to stretch hands a little bit (slightly elongated)
+       local function stretchHands(character)
+           -- Wait for the parts to load in the character model
+           local leftHand = character:WaitForChild("LeftHand")
+           local rightHand = character:WaitForChild("RightHand")
+           
+           -- Stretch the hands to be slightly longer and thinner
+           leftHand.Size = Vector3.new(1, 28, 1)  -- Slightly longer left hand
+           rightHand.Size = Vector3.new(1, 28, 1)  -- Slightly longer right hand
+           
+           -- Set the hands to be non-collidable (so they don't interact with the environment)
+           leftHand.CanCollide = false
+           rightHand.CanCollide = false
+       end
+
+       -- Apply the hand modifications when the button is pressed
+       local character = player.Character
+       if character and character:FindFirstChild("Humanoid") then
+           stretchHands(character)
+       end
    end,
 })
