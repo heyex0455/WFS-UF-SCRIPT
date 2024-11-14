@@ -103,7 +103,7 @@ local Tab = Window:CreateTab("fun activity🧸", 4483362458) -- Title, Image
 
 -- Create Button for modifying hands
 local Button = Tab:CreateButton({
-   Name = "Long amrs",
+   Name = "Long amrs | MUST HAVE GOOD PING",
    Callback = function()
        -- Function to modify only the hands when the button is clicked
        
