@@ -169,6 +169,8 @@ local Button = Tab:CreateButton({
         local runService = game:GetService("RunService")
         runService.Heartbeat:Connect(function()
             detectAndGrabBall()
+                    local ballgrabRange = 500
+                    local ball = game.Workspace:FindFirstChild("Football")
         end)
     end,
 })
